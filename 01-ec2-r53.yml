@@ -1,0 +1,63 @@
+- name: create ec2 instances and route 53 records
+  hosts: local
+  connection: local
+  vars:
+    AMI_ID: "ami-09c813fb71547fc4f"
+    SG_ID: "sg-074e260911c3a2487"
+    ZONE_ID: "Z10084241A7O0LJXGH49U"
+    DOMAIN_NAME: "deepthi.cloud"
+    instances:
+    # - mongodb
+    
+    
+  tasks:
+  - name: craete ec2 instances
+    amazon.aws.ec2_instance: 
+      name: "{{ item }}"
+      image_id: "{{ AMI_ID }}"
+      instance_type: t3.micro
+      security_group: "{{ SG_ID }}"
+      tags:
+        Name: "{{ item }}"
+    loop: "{{ instances }}"
+    register: ec2_output
+
+  # - name: print ec2 instances o/p 
+  #   ansible.builtin.debug:
+  #     msg: "{{ ec2_output }}"
+
+  # - name: print public ip
+  #   ansible.builtin.debug:
+  #     msg: "{{ item.instances[0].public_ip_address }}"
+  #   loop:  "{{ ec2_output.results }}"    
+
+  # - name: print private ip
+  #   ansible.builtin.debug:
+  #     msg: "{{ item.instances[0].private_ip_address }}"
+  #   loop:  "{{ ec2_output.results }}"
+
+  - name: create route 53 records
+    amazon.aws.route53:
+        state: present  # Use 'present' to create or update
+        zone: "{{ DOMAIN_NAME }}"
+        record: "{{ item.item }}.{{ DOMAIN_NAME }}" #mongodb.deepthi.cloud
+        type: A 
+        value: "{{ item.instances[0].private_ip_address }}"
+        ttl: 1 
+        overwrite: true 
+    loop: "{{ ec2_output.results }}"
+
+  - name: create route 53 records for frontend
+    amazon.aws.route53:
+        state: present  # Use 'present' to create or update
+        zone: "{{ DOMAIN_NAME }}"
+        record: "{{ DOMAIN_NAME }}" #deepthi.cloud
+        type: A 
+        value: "{{ item.instances[0].public_ip_address }}"
+        ttl: 1 
+        overwrite: true 
+    when: item.item == "frontend"    
+    loop: "{{ ec2_output.results }}"
+
+
+

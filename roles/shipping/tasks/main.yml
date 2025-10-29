@@ -1,0 +1,37 @@
+- name: import app setup from common    
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: app-setup.yml
+
+- name: import maven setup from common
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: maven.yml   
+
+- name: Install PyMySQL
+  ansible.builtin.pip: 
+    name: "{{ item }}"
+    state: present
+  loop:
+  - PyMySQL
+  - cryptography
+
+- name: Import database dump
+  community.mysql.mysql_db:
+    name: all
+    state: import
+    target: "{{ item }}"
+    login_host: "{{ MYSQL_HOST }}"
+    login_user: "{{ MYSQL_ROOT_USER }}"
+    login_password: "{{ MYSQL_ROOT_PASSWORD }}"
+  loop:
+  - /app/db/schema.sql
+  - /app/db/app-user.sql 
+  - /app/db/master-data.sql    
+
+
+- name: import systemd setup from common
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: systemd-setup.yml
+
