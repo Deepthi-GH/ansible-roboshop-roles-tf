@@ -1,1 +1,1 @@
-MONGODB_HOST: mongodb.deepthi.cloud
+MONGODB_HOST: mongodb-{{ env }}.deepthi.cloud
