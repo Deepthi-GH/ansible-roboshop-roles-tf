@@ -1,9 +1,9 @@
 MONGODB_HOST: mongodb-{{ env }}.deepthi.cloud # mongodb-dev.deepthi.cloud
 REDIS_HOST: redis-{{ env }}.deepthi.cloud
-CATALOGUE_HOST: catalogue-{{ env }}.deepthi.cloud
-CART_HOST: cart-{{ env }}.deepthi.cloud
+CATALOGUE_HOST: catalogue.backend-alb-{{ env }}.deepthi.cloud
+CART_HOST: cart.backend-alb-{{ env }}.deepthi.cloud
 MYSQL_HOST: mysql-{{ env }}.deepthi.cloud
-USER_HOST: user-{{ env }}.deepthi.cloud
+USER_HOST: user.backend-alb-{{ env }}.deepthi.cloud
 RABBITMQ_HOST: rabbitmq-{{ env }}.deepthi.cloud
-SHIPPING_HOST: shipping-{{ env }}.deepthi.cloud
-PAYMENT_HOST: payment-{{ env }}.deepthi.cloud
+SHIPPING_HOST: shipping.backend-alb-{{ env }}.deepthi.cloud
+PAYMENT_HOST: payment.backend-alb-{{ env }}.deepthi.cloud
