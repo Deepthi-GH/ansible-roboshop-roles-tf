@@ -5,17 +5,17 @@
 
 # changed this as part of latest python3-devel from repos haev upgraded openssl-libs but other openssl packages are old in AMI,so mismatch occured.we are upgrading before installing python or after.
 
-- name: upgrade openssl packages
-  ansible.builtin.dnf:
-    name: "{{ item }}"
-    state: latest
-  loop:
-    - openssl
-    - openssl-libs
-    - openssh
-    - openssh-server
-    - openssh-clients
-    
+# - name: upgrade openssl packages
+#   ansible.builtin.dnf:
+#     name: "{{ item }}"
+#     state: latest
+#   loop:
+#     - openssl
+#     - openssl-libs
+#     - openssh
+#     - openssh-server
+#     - openssh-clients
+
 - name: import python setup from common role
   ansible.builtin.import_role:
     name: common
